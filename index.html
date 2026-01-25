@@ -1,1 +1,629 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Vikingatiden – Träning</title>
 
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --primary:#4f6df5;
+    --front:#e8ecff;
+    --back:#dff3e8;
+    --txt:#1a1a1a;
+    --muted:#667085;
+    --radius:14px;
+    --shadow:0 8px 20px rgba(16,24,40,.08);
+    --shadow2:0 6px 14px rgba(16,24,40,.10);
+    --gap:10px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui;
+    background:var(--bg);
+    color:var(--txt);
+  }
+
+  /* Fixed top menu (wraps to multiple rows, no horizontal scroll) */
+  .topbar{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:999;
+    background:var(--primary);
+    color:#fff;
+    padding:calc(10px + env(safe-area-inset-top)) 12px 12px;
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+  }
+  .title{
+    font-weight:900;
+    text-align:center;
+    padding-bottom:8px;
+    letter-spacing:.2px;
+  }
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:8px;
+  }
+  .tab{
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    padding:8px 8px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:800;
+    line-height:1.05;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .tab.active{
+    background:#fff;
+    color:var(--primary);
+    border-color:#fff;
+  }
+
+  main{
+    padding-top:168px; /* enough for multi-row menu */
+    padding-bottom:28px;
+  }
+
+  .page{
+    display:none;
+    margin:12px;
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px;
+  }
+  .page.active{display:block}
+
+  h2{ margin:0 0 8px 0; font-size:20px; }
+  h3{ margin:12px 0 6px 0; font-size:16px; }
+  p{ margin:8px 0; line-height:1.35; }
+  ul{ margin:8px 0 8px 18px; }
+  li{ margin:6px 0; }
+
+  .hint{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  /* Flipcards */
+  .flip-grid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:var(--gap);
+    padding:2px;
+  }
+  .card{ perspective:1000px; }
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:92px;
+    transform-style:preserve-3d;
+    transition:transform .55s;
+  }
+  .card.flipped .card-inner{ transform:rotateY(180deg); }
+  .card-face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px;
+    text-align:center;
+    font-weight:850;
+    box-shadow:var(--shadow2);
+  }
+  .front{ background:var(--front); }
+  .back{
+    background:var(--back);
+    transform:rotateY(180deg);
+    font-size:14px;
+    font-weight:700;
+  }
+
+  /* Content cards */
+  .info-card{
+    background:#fbfcff;
+    border:1px solid #e4e7ec;
+    border-radius:14px;
+    padding:12px;
+    box-shadow:0 10px 18px rgba(16,24,40,.06);
+    margin-top:10px;
+  }
+  .pill-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+  }
+  .pill{
+    background:var(--front);
+    border:1px solid #d6dcff;
+    color:#243bff;
+    font-weight:850;
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:13px;
+  }
+
+  /* Asatro mini “illustration” */
+  .world{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  .world-box{
+    border-radius:14px;
+    padding:12px;
+    border:1px solid #e4e7ec;
+    box-shadow:0 10px 18px rgba(16,24,40,.06);
+  }
+  .asgard{ background:var(--front); }
+  .midgard{ background:var(--back); }
+  .world-box b{ font-size:15px; }
+
+  /* Q/A accordion cards */
+  .qa{
+    border:1px solid #e4e7ec;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 10px 18px rgba(16,24,40,.06);
+    margin-top:10px;
+  }
+  .qa button{
+    width:100%;
+    border:0;
+    background:#fff;
+    padding:12px 12px;
+    text-align:left;
+    font-weight:900;
+    font-size:15px;
+  }
+  .qa .answer{
+    display:none;
+    padding:0 12px 12px;
+    color:#111827;
+  }
+  .qa.open .answer{ display:block; }
+  .qa .answer p{ margin:8px 0; }
+  .qa .answer .hint{ margin-top:0; }
+
+  /* True/False */
+  .tf-list{
+    display:grid;
+    gap:10px;
+    margin-top:10px;
+  }
+  .tf-item{
+    border:1px solid #e4e7ec;
+    border-radius:14px;
+    padding:12px;
+    background:#fff;
+    box-shadow:0 10px 18px rgba(16,24,40,.06);
+  }
+  .tf-item .s{
+    font-weight:900;
+    margin:0 0 10px 0;
+  }
+  .tf-btns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .tf-btn{
+    border:1px solid #d0d5dd;
+    background:#fff;
+    border-radius:12px;
+    padding:10px;
+    font-weight:900;
+  }
+  .tf-btn.primary{
+    border-color:#d6dcff;
+    background:var(--front);
+    color:#243bff;
+  }
+  .tf-result{
+    margin-top:10px;
+    font-weight:950;
+  }
+  .good{ color:#1b8f4a; }
+  .bad{ color:#b42318; }
+
+  textarea{
+    width:100%;
+    border:1px solid #d0d5dd;
+    border-radius:12px;
+    padding:10px;
+    font-size:15px;
+    min-height:90px;
+    margin-top:10px;
+  }
+
+  .small-note{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+</style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="title">Vikingatiden – Träna inför prov</div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-page="oversikt">Översikt</button>
+      <button class="tab" data-page="begrepp">Begrepp</button>
+      <button class="tab" data-page="asatro">Asatro</button>
+      <button class="tab" data-page="moten">Möten</button>
+      <button class="tab" data-page="kallor">Källor</button>
+      <button class="tab" data-page="historiebruk">Historiebruk</button>
+      <button class="tab" data-page="fragor">Frågor</button>
+      <button class="tab" data-page="santfalskt">Sant/Falskt</button>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ÖVERSIKT -->
+    <section class="page active" id="page-oversikt">
+      <h2>📌 Översikt</h2>
+      <p><b>Vikingatiden</b> var en tid då människor i Norden reste långt ut i världen, och deras världsbild förändrades.</p>
+
+      <div class="info-card">
+        <h3>Kom ihåg i 4 punkter</h3>
+        <ul>
+          <li><b>Asatron</b>: många gudar i Asgård, människor i Midgård.</li>
+          <li><b>Offer (blot)</b>: man offrade för att få hjälp (t.ex. skörd/framgång).</li>
+          <li><b>Möten</b>: vikingar mötte både kristendom och islam genom resor.</li>
+          <li><b>Källor</b>: kvarlevor, runstenar och skriftliga källor.</li>
+        </ul>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill">asatro</span>
+        <span class="pill">offer / blot</span>
+        <span class="pill">runsten</span>
+        <span class="pill">källor</span>
+        <span class="pill">historiebruk</span>
+      </div>
+
+      <p class="hint">Tips: använd flikarna högst upp. Du behöver inte scrolla i sidled.</p>
+    </section>
+
+    <!-- BEGREPP (FLIPCARDS) -->
+    <section class="page" id="page-begrepp">
+      <h2>🧩 Begrepp (flipcards)</h2>
+      <p class="hint">Tryck på ett kort för att se förklaringen.</p>
+      <div class="flip-grid" id="begreppCards"></div>
+    </section>
+
+    <!-- ASATRO -->
+    <section class="page" id="page-asatro">
+      <h2>🛡️ Vikingarnas tro: Asatron</h2>
+      <p>Innan kristendomen kom till Norden trodde man på <b>asatron</b>.</p>
+
+      <div class="world">
+        <div class="world-box asgard">
+          <b>Asgård</b>
+          <p class="hint">Här bodde gudarna.</p>
+        </div>
+        <div class="world-box midgard">
+          <b>Midgård</b>
+          <p class="hint">Här bodde människorna.</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>Viktigaste gudarna</h3>
+        <ul>
+          <li><b>Oden</b>: krigets och visdomens gud (äldst och klokast).</li>
+          <li><b>Tor</b>: skyddade människor mot jättar med hammaren <b>Mjölner</b>.</li>
+          <li><b>Frej & Freja</b>: fruktbarhet, skördar och kärlek.</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>Offer (blot)</h3>
+        <p>För att hålla sig väl med gudarna gjorde man <b>offer</b> som kallades <b>blot</b>.</p>
+        <p class="hint">Man kunde blota djur (och ibland annat) för t.ex. god skörd eller seger i strid.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Skillnad mot kristendom (enkel)</h3>
+        <ul>
+          <li><b>Asatro</b>: många gudar.</li>
+          <li><b>Kristendom</b>: en Gud.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- MÖTEN -->
+    <section class="page" id="page-moten">
+      <h2>🌍 Möten med andra kulturer</h2>
+      <p>Vikingarna var skickliga sjömän och reste både i öst och väst.</p>
+
+      <div class="info-card">
+        <h3>Mötet med kristendomen</h3>
+        <p>När vikingarna reste i Europa mötte de kristna länder.</p>
+        <p><b>Ansgar</b> kom till <b>Birka</b> på 800-talet för att sprida tron.</p>
+        <p class="hint">Det tog lång tid, men Norden började så småningom kristnas. Folk slutade blota och började bygga kyrkor.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Mötet med islam</h3>
+        <p>Vikingar som reste österut längs floder i nuvarande Ryssland kom ända till Bagdad.</p>
+        <p class="hint">Bevis: man har hittat tusentals arabiska silvermynt i nordisk jord.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Bevis på möten</h3>
+        <ul>
+          <li>Arabiska <b>silvermynt</b> hittade i Norden.</li>
+          <li>Skriftliga texter från andra länder.</li>
+          <li>Föremål och spår från resor och handel.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- KÄLLOR -->
+    <section class="page" id="page-kallor">
+      <h2>📚 Hur vet vi något om vikingatiden?</h2>
+      <p class="hint">Vi kan inte intervjua en viking. Vi använder olika källor.</p>
+
+      <div class="info-card">
+        <h3>1) Kvarlevor</h3>
+        <p>Saker som finns kvar: skelett, vapen, smycken, vikingaskepp.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>2) Runstenar</h3>
+        <p>Vikingarnas egna minnesmärken. Ofta restes de för att hedra någon som dött.</p>
+        <p class="hint">Texten kan berätta om resor och familjer.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>3) Skriftliga källor</h3>
+        <p>Texter som skrevs ner, ofta av folk från andra länder som mötte vikingarna.</p>
+        <p class="hint">Ibland skrevs de långt senare av kristna munkar.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Källkritik (varför viktigt?)</h3>
+        <ul>
+          <li>Olika källor kan säga olika.</li>
+          <li>Författare kan vara rädda, partiska eller överdriva.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- HISTORIEBRUK -->
+    <section class="page" id="page-historiebruk">
+      <h2>🎭 Historiebruk</h2>
+      <p><b>Historiebruk</b> betyder hur vi använder historia för olika syften idag.</p>
+
+      <div class="info-card">
+        <h3>Exempel på historiebruk</h3>
+        <ul>
+          <li><b>Turism</b>: hjälmar med horn säljs (fast vikingar inte hade horn på hjälmar).</li>
+          <li><b>Identitet</b>: vissa använder vikingar för att visa styrka/kultur.</li>
+          <li><b>Film & spel</b>: vikingar visas ofta som tuffa krigare för att det känns spännande.</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>Kom ihåg</h3>
+        <p>Vikingen på film är ofta en <b>fantasibild</b> som skiljer sig från hur människor levde på riktigt.</p>
+      </div>
+    </section>
+
+    <!-- FRÅGOR (Q/A + skrivyta) -->
+    <section class="page" id="page-fragor">
+      <h2>🗣️ Instuderingsfrågor</h2>
+      <p class="hint">Tryck på en fråga för att se ett kort svar. Skriv gärna egna stödord.</p>
+
+      <div class="qa" data-qa>
+        <button type="button">1) Vikingarnas religion – vad hette den och vilka gudar var viktigast?</button>
+        <div class="answer">
+          <p>Religionen hette <b>asatro</b>. De viktigaste gudarna: <b>Oden</b>, <b>Tor</b>, <b>Frej & Freja</b>.</p>
+          <p class="hint">Asatro = många gudar. Kristendom = en Gud.</p>
+        </div>
+      </div>
+
+      <div class="qa" data-qa>
+        <button type="button">2) Vad menas med offer/att offra (blot)?</button>
+        <div class="answer">
+          <p><b>Blot</b> var offer till gudarna för att få hjälp, t.ex. god skörd eller seger i strid.</p>
+        </div>
+      </div>
+
+      <div class="qa" data-qa>
+        <button type="button">3) Bevis på att vikingarna mötte andra kulturer?</button>
+        <div class="answer">
+          <p>De reste långt och mötte kristendom och islam.</p>
+          <p class="hint">Bevis: arabiska silvermynt i Norden, föremål/spår, och skriftliga berättelser.</p>
+        </div>
+      </div>
+
+      <div class="qa" data-qa>
+        <button type="button">4) Hur gick det till när Sverige övergick till kristendomen?</button>
+        <div class="answer">
+          <p>Det tog lång tid. <b>Ansgar</b> kom till <b>Birka</b> på 800-talet. Så småningom kristnades Norden, man slutade blota och började bygga kyrkor.</p>
+        </div>
+      </div>
+
+      <div class="qa" data-qa>
+        <button type="button">5) Vilka historiska källor finns för vikingatiden?</button>
+        <div class="answer">
+          <p><b>Kvarlevor</b>, <b>runstenar</b> och <b>skriftliga källor</b>.</p>
+        </div>
+      </div>
+
+      <div class="qa" data-qa>
+        <button type="button">6) Vad menas med historiebruk?</button>
+        <div class="answer">
+          <p>Hur vi använder historia idag, t.ex. i turism, identitet, film och spel.</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>Diskutera / öva muntligt (skriv stödord)</h3>
+        <ul>
+          <li>Varför är bra källor viktiga i historia?</li>
+          <li>Varför kan vi inte alltid lita på det kristna och muslimer skrev om vikingar?</li>
+          <li>Varför reser vi gravstenar idag (likt runstenar)?</li>
+          <li>Varför visar film ofta våldsamma vikingar i stället för handel?</li>
+        </ul>
+        <textarea placeholder="Skriv stödord här… (vuxen kan kolla efteråt)"></textarea>
+        <div class="small-note">Tips: skriv 3–5 stödord per fråga.</div>
+      </div>
+    </section>
+
+    <!-- SANT/FALSKT -->
+    <section class="page" id="page-santfalskt">
+      <h2>✅ Sant eller falskt</h2>
+      <p class="hint">Tryck Sant eller Falskt. Du får direkt feedback.</p>
+
+      <div class="tf-list" id="tfList"></div>
+
+      <div class="info-card">
+        <h3>Kort källkritik-komihåg</h3>
+        <p>När vi läser om vikingar från andra länder kan texten vara färgad av rädsla eller åsikter.</p>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+  // Tabs -> pages
+  const tabs = document.getElementById("tabs");
+  const allTabs = Array.from(tabs.querySelectorAll(".tab"));
+  const pages = {};
+  document.querySelectorAll(".page").forEach(p=>{
+    pages[p.id.replace("page-","")] = p;
+  });
+
+  function showPage(key){
+    Object.values(pages).forEach(p => p.classList.remove("active"));
+    pages[key].classList.add("active");
+    allTabs.forEach(t => t.classList.toggle("active", t.dataset.page === key));
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+
+  tabs.addEventListener("click", (e) => {
+    const btn = e.target.closest(".tab");
+    if(!btn) return;
+    showPage(btn.dataset.page);
+  });
+
+  // Begrepp flipcards (bildstöd + centrala ord från texten)
+  const begrepp = {
+    "asatro":"Vikingarnas religion med många gudar.",
+    "kristendom":"Religion med en Gud. Spreds långsamt i Norden.",
+    "islam":"Religion som vikingar mötte österut.",
+    "runsten":"Minnessten. Text kan berätta om resor och familj.",
+    "offer (blot)":"Offer till gudarna för hjälp (skörd/framgång).",
+    "Oden":"Krigets och visdomens gud (äldst och klokast).",
+    "Tor":"Skyddade människor. Hammaren heter Mjölner.",
+    "Freja":"Kärlek och fruktbarhet (tillsammans med Frej).",
+    "Frej":"Skördar och fruktbarhet (tillsammans med Freja).",
+    "Asgård":"Platsen där gudarna bodde.",
+    "Midgård":"Platsen där människor bodde.",
+    "skriftliga källor":"Texter nedskrivna (ofta av andra folk).",
+    "kvarlevor":"Saker som finns kvar: skepp, vapen, smycken…",
+    "historiebruk":"Hur vi använder historia idag (turism/film/identitet).",
+    "turism":"Använda vikingar för att locka besökare.",
+    "Ansgar":"Munk som kom till Birka på 800-talet.",
+    "Birka":"Plats i Sverige där Ansgar spred kristendom.",
+    "silvermynt":"Arabiska mynt hittade i Norden visar kontakt i öst."
+  };
+
+  const begContainer = document.getElementById("begreppCards");
+  Object.entries(begrepp).forEach(([word, def]) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face front">${word}</div>
+        <div class="card-face back">${def}</div>
+      </div>`;
+    card.addEventListener("click", () => card.classList.toggle("flipped"));
+    begContainer.appendChild(card);
+  });
+
+  // Q/A accordions
+  document.querySelectorAll("[data-qa]").forEach(box=>{
+    const btn = box.querySelector("button");
+    btn.addEventListener("click", ()=> box.classList.toggle("open"));
+  });
+
+  // Sant/Falskt
+  // (Bygger på texten du skickade)
+  const tf = [
+    {
+      s:"Vikingatiden var väldigt populär på 1800-talet.",
+      correct:true,
+      why:"Sant: på 1800-talet blev vikingar populära i konst och berättelser."
+    },
+    {
+      s:"De flesta runstenarna är från 1400-talet.",
+      correct:false,
+      why:"Falskt: de flesta runstenar är från vikingatid/tidig medeltid, inte 1400-talet."
+    },
+    {
+      s:"Mjölner var en av de viktigaste gudarna.",
+      correct:false,
+      why:"Falskt: Mjölner är Tors hammare, inte en gud."
+    },
+    {
+      s:"I slutet av vikingatiden byggdes kyrkor och moskéer i Norden.",
+      correct:false,
+      why:"Falskt: kyrkor började byggas, men moskéer var inte en del av kristnandet i Norden."
+    },
+    {
+      s:"Tors hammare är en symbol för asatron, precis som korset är för kristendomen.",
+      correct:true,
+      why:"Sant: Mjölner = symbol för asatro, korset = symbol för kristendom."
+    }
+  ];
+
+  const tfList = document.getElementById("tfList");
+
+  tf.forEach((item, idx)=>{
+    const div = document.createElement("div");
+    div.className = "tf-item";
+    div.innerHTML = `
+      <div class="s">${item.s}</div>
+      <div class="tf-btns">
+        <button class="tf-btn primary" type="button" data-a="true">Sant</button>
+        <button class="tf-btn" type="button" data-a="false">Falskt</button>
+      </div>
+      <div class="tf-result" id="tf-r-${idx}"></div>
+      <div class="small-note" id="tf-w-${idx}"></div>
+    `;
+    const res = div.querySelector(`#tf-r-${idx}`);
+    const why = div.querySelector(`#tf-w-${idx}`);
+    div.querySelectorAll(".tf-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const a = (btn.dataset.a === "true");
+        const ok = (a === item.correct);
+        res.innerHTML = ok ? `<span class="good">Rätt 👍</span>` : `<span class="bad">Inte riktigt</span>`;
+        why.textContent = item.why;
+      });
+    });
+    tfList.appendChild(div);
+  });
+</script>
+
+</body>
+</html>
