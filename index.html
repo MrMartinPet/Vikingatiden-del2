@@ -1,681 +1,841 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Vikingatiden 2 – Instudering</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <title>American Days Guide</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --panel:#121212;
+      --panel2:#1b1b1b;
+      --line:#2b2b2b;
+      --text:#f3f3f3;
+      --muted:#b8b8b8;
+      --orange:#ff9900;
+      --blue:#39a8ff;
+      --green:#35d07f;
+      --red:#ff5c5c;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
 
-<style>
-  :root{
-    --bg:#f4f6fb;
-    --card:#ffffff;
-    --primary:#4f6df5;
-    --front:#e8ecff;
-    --back:#dff3e8;
-    --txt:#1a1a1a;
-    --muted:#667085;
-    --radius:14px;
-    --shadow:0 8px 20px rgba(16,24,40,.08);
-    --shadow2:0 6px 14px rgba(16,24,40,.10);
-    --gap:10px;
-  }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
 
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui;
-    background:var(--bg);
-    color:var(--txt);
-  }
+    body{
+      margin:0;
+      background:radial-gradient(circle at top,#242424 0,#080808 35%,#050505 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      line-height:1.35;
+      padding-bottom:86px;
+    }
 
-  /* Fixed top menu (wraps to 3 columns, 2+ rows, no horizontal scroll) */
-  .topbar{
-    position:fixed;
-    top:0; left:0; right:0;
-    z-index:999;
-    background:var(--primary);
-    color:#fff;
-    padding:calc(10px + env(safe-area-inset-top)) 12px 12px;
-    box-shadow:0 6px 18px rgba(0,0,0,.12);
-  }
-  .title{
-    font-weight:950;
-    text-align:center;
-    padding-bottom:8px;
-    letter-spacing:.2px;
-  }
-  .tabs{
-    display:grid;
-    grid-template-columns:repeat(3, minmax(0, 1fr));
-    gap:8px;
-  }
-  .tab{
-    border:1px solid rgba(255,255,255,.35);
-    background:rgba(255,255,255,.14);
-    color:#fff;
-    padding:8px 8px;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:850;
-    line-height:1.05;
-    text-align:center;
-    white-space:nowrap;
-  }
-  .tab.active{
-    background:#fff;
-    color:var(--primary);
-    border-color:#fff;
-  }
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(5,5,5,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+      padding:14px 14px 10px;
+    }
 
-  main{
-    padding-top:176px; /* enough for multi-row menu */
-    padding-bottom:28px;
-  }
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      max-width:980px;
+      margin:0 auto;
+    }
 
-  .page{
-    display:none;
-    margin:12px;
-    background:var(--card);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding:16px;
-  }
-  .page.active{display:block}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
 
-  h2{ margin:0 0 8px 0; font-size:20px; }
-  h3{ margin:14px 0 6px 0; font-size:16px; }
-  p{ margin:8px 0; line-height:1.35; }
-  ul{ margin:8px 0 8px 18px; }
-  li{ margin:6px 0; }
+    .logo{
+      width:48px;
+      height:34px;
+      border-radius:8px;
+      background:linear-gradient(135deg,#143a85,#fff 42%,#d82424 43%,#d82424 62%,#fff 63%);
+      display:grid;
+      place-items:center;
+      font-size:10px;
+      font-weight:900;
+      color:#ffcf40;
+      text-shadow:0 1px 1px #000;
+      transform:skew(-8deg);
+      flex:0 0 auto;
+    }
 
-  .hint{
-    font-size:13px;
-    color:var(--muted);
-    margin-top:6px;
-  }
+    h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
 
-  /* Info card */
-  .info-card{
-    background:#fbfcff;
-    border:1px solid #e4e7ec;
-    border-radius:14px;
-    padding:12px;
-    box-shadow:0 10px 18px rgba(16,24,40,.06);
-    margin-top:10px;
-  }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
 
-  /* Flipcards */
-  .flip-grid{
-    display:grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap:var(--gap);
-    padding:2px;
-  }
-  .card{ perspective:1000px; }
-  .card-inner{
-    position:relative;
-    width:100%;
-    height:98px;
-    transform-style:preserve-3d;
-    transition:transform .55s;
-  }
-  .card.flipped .card-inner{ transform:rotateY(180deg); }
-  .card-face{
-    position:absolute;
-    inset:0;
-    backface-visibility:hidden;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:10px;
-    text-align:center;
-    font-weight:900;
-    box-shadow:var(--shadow2);
-  }
-  .front{ background:var(--front); }
-  .back{
-    background:var(--back);
-    transform:rotateY(180deg);
-    font-size:14px;
-    font-weight:750;
-  }
+    .pill{
+      border:1px solid var(--line);
+      background:#151515;
+      color:var(--text);
+      border-radius:999px;
+      padding:8px 11px;
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
+    }
 
-  /* Q/A cards */
-  .qa{
-    border:1px solid #e4e7ec;
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 10px 18px rgba(16,24,40,.06);
-    margin-top:10px;
-    background:#fff;
-  }
-  .qa button{
-    width:100%;
-    border:0;
-    background:#fff;
-    padding:12px 12px;
-    text-align:left;
-    font-weight:950;
-    font-size:15px;
-  }
-  .qa .answer{
-    display:none;
-    padding:0 12px 12px;
-    color:#111827;
-  }
-  .qa.open .answer{ display:block; }
-  .qa .answer p{ margin:8px 0; }
+    .pill.active{
+      background:var(--orange);
+      color:#111;
+      border-color:var(--orange);
+    }
 
-  /* Split blocks */
-  .split2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:10px;
-  }
-  .box{
-    border-radius:14px;
-    padding:12px;
-    border:1px solid #e4e7ec;
-    box-shadow:0 10px 18px rgba(16,24,40,.06);
-  }
-  .box.a{ background:var(--front); }
-  .box.b{ background:var(--back); }
-  .box b{ font-weight:950; }
+    .tabs{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      padding:12px 0 2px;
+      max-width:980px;
+      margin:0 auto;
+      scrollbar-width:none;
+    }
 
-  textarea{
-    width:100%;
-    border:1px solid #d0d5dd;
-    border-radius:12px;
-    padding:10px;
-    font-size:15px;
-    min-height:90px;
-    margin-top:10px;
-    background:#fff;
-  }
-  .small-note{
-    font-size:12px;
-    color:var(--muted);
-    margin-top:6px;
-  }
+    .tabs::-webkit-scrollbar{display:none}
 
-  /* True/False */
-  .tf-list{
-    display:grid;
-    gap:10px;
-    margin-top:10px;
-  }
-  .tf-item{
-    border:1px solid #e4e7ec;
-    border-radius:14px;
-    padding:12px;
-    background:#fff;
-    box-shadow:0 10px 18px rgba(16,24,40,.06);
-  }
-  .tf-item .s{
-    font-weight:950;
-    margin:0 0 10px 0;
-  }
-  .tf-btns{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-  .tf-btn{
-    border:1px solid #d0d5dd;
-    background:#fff;
-    border-radius:12px;
-    padding:10px;
-    font-weight:950;
-  }
-  .tf-btn.primary{
-    border-color:#d6dcff;
-    background:var(--front);
-    color:#243bff;
-  }
-  .tf-result{
-    margin-top:10px;
-    font-weight:950;
-  }
-  .good{ color:#1b8f4a; }
-  .bad{ color:#b42318; }
-</style>
+    main{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,rgba(255,153,0,.2),rgba(57,168,255,.12)),var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:var(--shadow);
+      margin-bottom:12px;
+    }
+
+    .hero h2{
+      margin:0 0 6px;
+      font-size:20px;
+    }
+
+    .tools{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:12px 0;
+    }
+
+    .tool{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:12px;
+      min-height:78px;
+    }
+
+    .tool b{
+      display:block;
+      font-size:20px;
+      margin-bottom:4px;
+    }
+
+    .search{
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#101010;
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+      margin:4px 0 12px;
+    }
+
+    .filterbar{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      margin:0 0 12px;
+      scrollbar-width:none;
+    }
+
+    .filterbar::-webkit-scrollbar{display:none}
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:20px 0 10px;
+    }
+
+    .sectionTitle h2{
+      margin:0;
+      font-size:24px;
+      background:var(--orange);
+      color:white;
+      padding:8px 12px;
+      border-radius:8px;
+      letter-spacing:.5px;
+    }
+
+    .count{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .event{
+      background:linear-gradient(180deg,#171717,#101010);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:13px;
+      margin:10px 0;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:start;
+      box-shadow:0 6px 18px rgba(0,0,0,.18);
+    }
+
+    .time{
+      font-size:18px;
+      font-weight:900;
+      color:var(--orange);
+      min-width:54px;
+    }
+
+    .event.night .time{
+      color:var(--blue);
+    }
+
+    .eventTitle{
+      font-size:16px;
+      font-weight:850;
+      margin:0 0 4px;
+    }
+
+    .meta{
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+    }
+
+    .tag{
+      border:1px solid #333;
+      border-radius:999px;
+      padding:2px 7px;
+      background:#202020;
+    }
+
+    .star{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      border:1px solid #444;
+      background:#111;
+      color:#777;
+      font-size:24px;
+      cursor:pointer;
+    }
+
+    .star.on{
+      background:var(--orange);
+      color:#111;
+      border-color:var(--orange);
+    }
+
+    .note{
+      grid-column:2 / 4;
+      display:none;
+      margin-top:-4px;
+    }
+
+    .event.selected .note{
+      display:block;
+    }
+
+    textarea{
+      width:100%;
+      min-height:58px;
+      resize:vertical;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0b0b0b;
+      color:var(--text);
+      padding:10px;
+      font-family:inherit;
+    }
+
+    .clash{
+      display:inline-flex;
+      gap:5px;
+      align-items:center;
+      color:#111;
+      background:#ffd15c;
+      border-radius:999px;
+      padding:2px 8px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .bottomnav{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:30;
+      background:rgba(5,5,5,.96);
+      backdrop-filter:blur(14px);
+      border-top:1px solid var(--line);
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .bottomnav .wrap{
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+    }
+
+    .navbtn{
+      border:0;
+      background:#151515;
+      color:var(--text);
+      border-radius:14px;
+      padding:9px 5px;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .navbtn.active{
+      background:var(--orange);
+      color:#111;
+    }
+
+    .guide{
+      display:none;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px;
+      margin:12px 0;
+    }
+
+    .guide.show{
+      display:block;
+    }
+
+    .guideItem{
+      border-bottom:1px solid var(--line);
+      padding:10px 0;
+    }
+
+    .guideItem:last-child{
+      border-bottom:0;
+    }
+
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .action{
+      border:0;
+      border-radius:14px;
+      background:var(--orange);
+      color:#111;
+      padding:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .action.secondary{
+      background:#222;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .copybox{
+      width:100%;
+      min-height:160px;
+      margin-top:10px;
+      display:none;
+    }
+
+    .empty{
+      color:var(--muted);
+      text-align:center;
+      padding:24px 10px;
+      border:1px dashed #3a3a3a;
+      border-radius:var(--radius);
+    }
+
+    @media (max-width:520px){
+      main{padding:12px}
+      .tools{grid-template-columns:1fr 1fr}
+      .tool{min-height:70px;padding:11px}
+      .tool b{font-size:18px}
+      .event{grid-template-columns:auto 1fr auto;padding:12px;gap:10px}
+      .sectionTitle h2{font-size:22px}
+      h1{font-size:16px}
+    }
+  </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="title">Vikingatiden 2 – Instudering</div>
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-page="hem">Hem</button>
-      <button class="tab" data-page="begrepp">Begrepp</button>
-      <button class="tab" data-page="texten">Texten</button>
-      <button class="tab" data-page="fragor">Frågor</button>
-      <button class="tab" data-page="diskutera">Diskutera</button>
-      <button class="tab" data-page="kallor">Källor</button>
-      <button class="tab" data-page="historiebruk">Historiebruk</button>
-      <button class="tab" data-page="santfalskt">Sant/Falskt</button>
+<header>
+  <div class="top">
+    <div class="brand">
+      <div class="logo">AD</div>
+      <div>
+        <h1>American Days Guide</h1>
+        <div class="small">Öland 4 till 6 juni</div>
+      </div>
     </div>
+    <button class="pill" id="showGuideBtn">Min guide</button>
+  </div>
+  <div class="tabs" id="dayTabs"></div>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>Planera vad du vill se</h2>
+    <div class="small">Tryck på stjärnan för att lägga till i din egen guide. Appen sparar valen i mobilen.</div>
+  </section>
+
+  <section class="tools">
+    <div class="tool">
+      <b id="selectedCount">0</b>
+      <span class="small">valda stopp</span>
+    </div>
+    <div class="tool">
+      <b id="clashCount">0</b>
+      <span class="small">tidskrockar</span>
+    </div>
+  </section>
+
+  <input class="search" id="search" placeholder="Sök artist, plats eller dag">
+
+  <div class="filterbar">
+    <button class="pill active" data-filter="all">Alla</button>
+    <button class="pill" data-filter="music">Musik</button>
+    <button class="pill" data-filter="cars">Bilar</button>
+    <button class="pill" data-filter="show">Show</button>
+    <button class="pill" data-filter="night">American Nights</button>
+    <button class="pill" data-filter="day">American Days</button>
   </div>
 
-  <main>
+  <section class="guide" id="guide">
+    <div class="sectionTitle">
+      <h2>MIN GUIDE</h2>
+      <span class="count" id="guideSummary"></span>
+    </div>
+    <div id="guideList"></div>
+    <div class="actions">
+      <button class="action" id="copyBtn">Skapa textguide</button>
+      <button class="action secondary" id="clearBtn">Rensa val</button>
+    </div>
+    <textarea class="copybox" id="copyBox" readonly></textarea>
+  </section>
 
-    <!-- HEM -->
-    <section class="page active" id="page-hem">
-      <h2>🛡️ Vikingatiden</h2>
-      <p>
-        Vikingatiden var en tid då människor i Norden reste långt, mötte andra kulturer och
-        deras tro och liv förändrades.
-      </p>
+  <div id="program"></div>
+</main>
 
-      <div class="info-card">
-        <h3>Översikt</h3>
-        <ul>
-          <li><b>Begrepp</b> – viktiga ord (flipcards)</li>
-          <li><b>Texten</b> – lärartexten uppdelad i små delar</li>
-          <li><b>Frågor</b> – instuderingsfrågor med korta svar</li>
-          <li><b>Diskutera</b> – “bra meningar” att säga högt</li>
-          <li><b>Källor</b> – kvarlevor, runstenar, skriftliga källor</li>
-          <li><b>Historiebruk</b> – turism, identitet, film & spel</li>
-          <li><b>Sant/Falskt</b> – snabb koll med feedback</li>
-        </ul>
-        <p class="hint">Tips: börja med Begrepp → Frågor → Sant/Falskt.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>Snabbkomihåg (3 meningar)</h3>
-        <ul>
-          <li><b>Asatro</b> = många gudar (Oden, Tor, Frej/Freja).</li>
-          <li><b>Blot</b> = offer för att få hjälp (t.ex. skörd/framgång).</li>
-          <li><b>Källor</b> = kvarlevor + runstenar + skriftliga källor.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- BEGREPP -->
-    <section class="page" id="page-begrepp">
-      <h2>🧩 Begrepp (flipcards)</h2>
-      <p class="hint">Tryck på ett kort för att vända och se en enkel förklaring.</p>
-      <div class="flip-grid" id="begreppCards"></div>
-    </section>
-
-    <!-- TEXTEN (APP-LIK) -->
-    <section class="page" id="page-texten">
-      <h2>📘 Texten (uppdelad)</h2>
-      <p class="hint">Tryck på rubrikerna för att visa texten i små, tydliga delar.</p>
-
-      <div class="qa open" data-qa>
-        <button type="button">Vikingatiden: Tro, resor och spår i historien</button>
-        <div class="answer">
-          <p>
-            Vikingatiden var en spännande tid i Nordens historia.
-            Människor började resa långt ut i världen, och deras världsbild förändrades.
-          </p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Vikingarnas tro: Asatron</button>
-        <div class="answer">
-          <p>
-            Innan kristendomen kom till Norden trodde man på <b>asatron</b>.
-            Det var en religion med <b>många gudar</b>.
-          </p>
-
-          <div class="split2">
-            <div class="box a">
-              <b>Asgård</b>
-              <p class="hint">Här bodde gudarna.</p>
-            </div>
-            <div class="box b">
-              <b>Midgård</b>
-              <p class="hint">Här bodde människorna.</p>
-            </div>
-          </div>
-
-          <h3>De tre viktigaste gudarna</h3>
-          <ul>
-            <li><b>Oden</b>: krigets och visdomens gud.</li>
-            <li><b>Tor</b>: skyddade människor med hammaren <b>Mjölner</b>.</li>
-            <li><b>Frej & Freja</b>: fruktbarhet, skördar och kärlek.</li>
-          </ul>
-
-          <h3>Offer (blot)</h3>
-          <p>
-            För att hålla sig väl med gudarna genomförde man <b>offer</b>, vilket kallades <b>blot</b>.
-          </p>
-          <p class="hint">Man kunde blota djur för att be om god skörd eller seger i strid.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Möten med andra kulturer och religioner</button>
-        <div class="answer">
-          <p>Vikingarna var skickliga sjömän och reste både i öst och väst.</p>
-          <ul>
-            <li>
-              <b>Mötet med kristendomen</b>:
-              Munken <b>Ansgar</b> kom till <b>Birka</b> på 800-talet.
-              Det tog lång tid, men Norden kristnades och man byggde kyrkor.
-            </li>
-            <li>
-              <b>Mötet med islam</b>:
-              Vikingar som reste österut kom långt och man har hittat <b>arabiska silvermynt</b> i Norden.
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Hur vet vi detta? (kort)</button>
-        <div class="answer">
-          <p>Vi kan inte intervjua en viking, så vi använder källor:</p>
-          <ul>
-            <li><b>Kvarlevor</b> – saker som finns kvar (skepp, smycken, vapen…).</li>
-            <li><b>Runstenar</b> – vikingarnas egna minnesmärken.</li>
-            <li><b>Skriftliga källor</b> – texter skrivna av andra folk eller senare av munkar.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <h3>Mini-repetition</h3>
-        <ul>
-          <li>Asatro = många gudar.</li>
-          <li>Blot = offer.</li>
-          <li>Resor = möten med kristendom + islam.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- FRÅGOR -->
-    <section class="page" id="page-fragor">
-      <h2>🗣️ Instuderingsfrågor</h2>
-      <p class="hint">Tryck på en fråga → få ett kort, prov-vänligt svar.</p>
-
-      <div class="qa" data-qa>
-        <button type="button">1) Vikingarnas religion: vad kallades den, och vilka gudar var viktigast? Hur skiljer den sig från kristendomen?</button>
-        <div class="answer">
-          <p><b>Asatro</b> var vikingarnas religion. Den hade <b>många gudar</b>.</p>
-          <p>Viktigast: <b>Oden</b>, <b>Tor</b>, <b>Frej & Freja</b>.</p>
-          <p class="hint">Skillnad: Asatro = många gudar. Kristendom = en Gud och kyrkor.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">2) Vad menas med offer/att offra (blot)?</button>
-        <div class="answer">
-          <p><b>Blot</b> betyder att man offrade till gudarna för att få hjälp.</p>
-          <p class="hint">Exempel: god skörd eller seger i strid.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">3) Vad finns det för bevis på att vikingarna mötte andra kulturer?</button>
-        <div class="answer">
-          <p>De reste långt och mötte både kristna och muslimer.</p>
-          <p class="hint">Bevis: arabiska silvermynt i Norden, föremål från handel och texter om möten.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">4) Hur gick det till när Sverige övergick till kristendomen?</button>
-        <div class="answer">
-          <p>Det tog lång tid. <b>Ansgar</b> kom till <b>Birka</b> på 800-talet.</p>
-          <p class="hint">Efterhand slutade man blota och började bygga kyrkor.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">5) Hur kan vi veta något om vikingatiden? Vilka historiska källor finns?</button>
-        <div class="answer">
-          <p>Vi använder: <b>kvarlevor</b>, <b>runstenar</b> och <b>skriftliga källor</b>.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">6) Vad menas med historiebruk?</button>
-        <div class="answer">
-          <p><b>Historiebruk</b> är hur vi använder historia idag, t.ex. turism, identitet, film och spel.</p>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <h3>Skriv stödord (valfritt)</h3>
-        <textarea placeholder="Skriv stödord för dina egna svar här…"></textarea>
-        <div class="small-note">Tips: 3–5 stödord per fråga.</div>
-      </div>
-    </section>
-
-    <!-- DISKUTERA -->
-    <section class="page" id="page-diskutera">
-      <h2>💬 Diskutera / öva muntligt</h2>
-      <p class="hint">Här finns en kort “bra mening” du kan säga på provet.</p>
-
-      <div class="qa open" data-qa>
-        <button type="button">Varför är det viktigt att ha bra källor när man håller på med historia?</button>
-        <div class="answer">
-          <p>Bra källor gör att vi kan förstå hur det var på riktigt och inte bara tro på rykten eller överdrifter.</p>
-          <p class="hint">Om flera källor säger liknande blir det mer trovärdigt.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Varför kan vi inte alltid lita på det som kristna och muslimer skrev om vikingarna?</button>
-        <div class="answer">
-          <p>De kunde vara rädda för vikingarna eller se dem som fiender, så de kan ha överdrivit eller varit partiska.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Idag reser vi gravstenar – inte helt olikt runstenar. Varför gör vi så?</button>
-        <div class="answer">
-          <p>Vi reser gravstenar för att minnas någon som dött, precis som vikingarna reste runstenar för att hedra någon.</p>
-        </div>
-      </div>
-
-      <div class="qa" data-qa>
-        <button type="button">Varför visar film/serier ofta våldsamma vikingar?</button>
-        <div class="answer">
-          <p>Våld och strider blir spännande på film, men vikingar gjorde också andra saker som handel och resor.</p>
-          <p class="hint">Film kan vara en fantasibild – det är historiebruk.</p>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <h3>Din egen muntliga version</h3>
-        <textarea placeholder="Skriv dina egna meningar så du kommer ihåg dem…"></textarea>
-        <div class="small-note">Tips: 1–2 meningar per fråga.</div>
-      </div>
-    </section>
-
-    <!-- KÄLLOR -->
-    <section class="page" id="page-kallor">
-      <h2>📚 Källor till historien</h2>
-      <p class="hint">Samma rubrik som i materialet – nu appvänligt.</p>
-
-      <div class="info-card">
-        <h3>1) Kvarlevor</h3>
-        <p>Saker som finns kvar: skelett, vapen, smycken och vikingaskepp.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>2) Runstenar</h3>
-        <p>Vikingarnas egna minnesmärken. Ofta restes de för att hedra någon som dött.</p>
-        <p class="hint">Texten kan berätta om resor och familjer.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>3) Skriftliga källor</h3>
-        <p>Texter som skrevs ner. Ofta av folk från andra länder som mötte vikingarna, eller långt senare av kristna munkar.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>Källkritik (kom ihåg)</h3>
-        <ul>
-          <li>Jämför flera källor.</li>
-          <li>Fundera: vem skrev, varför, och kan de ha överdrivit?</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- HISTORIEBRUK -->
-    <section class="page" id="page-historiebruk">
-      <h2>🎭 Historiebruk</h2>
-      <p><b>Historiebruk</b> betyder hur vi använder historia för olika syften idag.</p>
-
-      <div class="info-card">
-        <h3>Turism</h3>
-        <p>Vi säljer hjälmar med horn för turister (fast vikingarna inte hade horn på hjälmarna).</p>
-      </div>
-
-      <div class="info-card">
-        <h3>Identitet</h3>
-        <p>Vissa använder vikingatiden för att visa att Norden är starkt eller har en speciell kultur.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>Film och spel</h3>
-        <p>Vikingar visas ofta som tuffa krigare för att det känns spännande.</p>
-        <p class="hint">Kom ihåg: film-vikingen är ofta en fantasibild.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>1 mening att komma ihåg</h3>
-        <p><b>Historiebruk</b> är när historia används idag – och då kan bilden bli förenklad eller överdriven.</p>
-      </div>
-    </section>
-
-    <!-- SANT/FALSKT -->
-    <section class="page" id="page-santfalskt">
-      <h2>✅ Sant eller falskt</h2>
-      <p class="hint">Tryck Sant eller Falskt. Du får direkt feedback + kort förklaring.</p>
-      <div class="tf-list" id="tfList"></div>
-    </section>
-
-  </main>
+<nav class="bottomnav">
+  <div class="wrap">
+    <button class="navbtn active" data-jump="Torsdag">Torsdag</button>
+    <button class="navbtn" data-jump="Fredag">Fredag</button>
+    <button class="navbtn" data-jump="Lördag">Lördag</button>
+    <button class="navbtn" id="guideNav">Guide</button>
+  </div>
+</nav>
 
 <script>
-  // Tabs -> pages
-  const tabs = document.getElementById("tabs");
-  const allTabs = Array.from(tabs.querySelectorAll(".tab"));
-  const pages = {};
-  document.querySelectorAll(".page").forEach(p=>{
-    pages[p.id.replace("page-","")] = p;
+const events = [
+  {day:"Torsdag", start:"14:00", title:"Highway 25", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Torsdag", start:"16:00", title:"Highway 25", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Torsdag", start:"20:30", title:"The Satellites", place:"The Barn", type:"music", block:"night"},
+  {day:"Torsdag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Torsdag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Torsdag", start:"21:45", title:"Mischief!", place:"The Barn", type:"music", block:"night"},
+  {day:"Torsdag", start:"22:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Torsdag", start:"23:00", title:"The Jetaways", place:"The Barn", type:"music", block:"night"},
+  {day:"Torsdag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Torsdag", start:"00:15", title:"Fancy Dan and the Highshouters", place:"The Barn", type:"music", block:"night", nextDay:true},
+  {day:"Torsdag", start:"01:00", title:"Record Hop med DJ", place:"The Barn", type:"music", block:"night", nextDay:true},
+
+  {day:"Fredag", start:"11:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+  {day:"Fredag", start:"13:00", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Fredag", start:"14:00", title:"Miss American Days Presentation", place:"American Days Tent", type:"show", block:"day"},
+  {day:"Fredag", start:"14:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+  {day:"Fredag", start:"15:00", title:"Mel´s Challenge", place:"Bilsport Classic stage", type:"show", block:"day"},
+  {day:"Fredag", start:"15:00", title:"Ranchparty med Lil Camille", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Fredag", start:"15:30", title:"Bedömning av lastbilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+  {day:"Fredag", start:"16:30", title:"The Satellites", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Fredag", start:"19:30", title:"Emelie Thorstensson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Fredag", start:"20:30", title:"Lil Camille & Raina Thompson", place:"The Barn", type:"music", block:"night"},
+  {day:"Fredag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Fredag", start:"21:00", title:"Emma Svensson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Fredag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Fredag", start:"21:45", title:"Mischief!", place:"The Barn", type:"music", block:"night"},
+  {day:"Fredag", start:"22:30", title:"Erica Jonsson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Fredag", start:"22:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Fredag", start:"23:00", title:"Johnny Horsepower", place:"The Barn", type:"music", block:"night"},
+  {day:"Fredag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Fredag", start:"00:00", title:"Jake Lindholm", place:"Bilsport & MC tältet", type:"music", block:"night", nextDay:true},
+  {day:"Fredag", start:"00:15", title:"The Wild Goners", place:"The Barn", type:"music", block:"night", nextDay:true},
+  {day:"Fredag", start:"01:00", title:"Record Hop med DJ", place:"The Barn", type:"music", block:"night", nextDay:true},
+
+  {day:"Lördag", start:"11:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+  {day:"Lördag", start:"12:30", title:"Flatfoot", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Lördag", start:"13:30", title:"Bedömning bilar och lastbilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+  {day:"Lördag", start:"14:00", title:"Pin Up Miss American Days", place:"American Days Tent", type:"show", block:"day"},
+  {day:"Lördag", start:"15:00", title:"Peter Jezewski & The Boppin Cats", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Lördag", start:"15:30", title:"Prisutdelning", place:"Bilsport Classic stage", type:"show", block:"day"},
+  {day:"Lördag", start:"16:30", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day"},
+  {day:"Lördag", start:"19:30", title:"John Whiteleather and the King Rats", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Lördag", start:"20:30", title:"Okawango Outlaws", place:"The Barn", type:"music", block:"night"},
+  {day:"Lördag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Lördag", start:"21:00", title:"The Promise Band Springsteen Tribute", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Lördag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Lördag", start:"21:45", title:"Peter Jezewski & The Boppin Cats", place:"The Barn", type:"music", block:"night"},
+  {day:"Lördag", start:"22:30", title:"Creedence Tribute", place:"Bilsport & MC tältet", type:"music", block:"night"},
+  {day:"Lördag", start:"22:30", title:"Ludwigssons Orkester", place:"The Saloon", type:"music", block:"night"},
+  {day:"Lördag", start:"23:00", title:"Charlie Thompson", place:"The Barn", type:"music", block:"night"},
+  {day:"Lördag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+  {day:"Lördag", start:"00:00", title:"Rednex", place:"Bilsport & MC tältet", type:"music", block:"night", nextDay:true},
+  {day:"Lördag", start:"00:15", title:"The Go Getters", place:"The Barn", type:"music", block:"night", nextDay:true},
+  {day:"Lördag", start:"01:00", title:"Record Hop med DJ Tiny Tim & Guest", place:"The Barn", type:"music", block:"night", nextDay:true},
+  {day:"Lördag", start:"01:15", title:"Fyrverkeri", place:"Festivalområdet", type:"show", block:"night", nextDay:true}
+].map((e,i)=>({...e,id:i}));
+
+let selected = JSON.parse(localStorage.getItem("ad_selected") || "[]");
+let notes = JSON.parse(localStorage.getItem("ad_notes") || "{}");
+let activeFilter = "all";
+let activeDay = localStorage.getItem("ad_day") || "Torsdag";
+
+const program = document.getElementById("program");
+const guide = document.getElementById("guide");
+const guideList = document.getElementById("guideList");
+const search = document.getElementById("search");
+
+function dayOrder(day){
+  return {Torsdag:1,Fredag:2,Lördag:3}[day] || 9;
+}
+
+function minutes(e){
+  const [h,m] = e.start.split(":").map(Number);
+  let mins = h * 60 + m;
+  if(e.nextDay) mins += 24 * 60;
+  return mins;
+}
+
+function typeText(type){
+  return {music:"Musik",cars:"Bilar",show:"Show"}[type] || type;
+}
+
+function blockText(block){
+  return block === "night" ? "American Nights" : "American Days";
+}
+
+function isSelected(id){
+  return selected.includes(id);
+}
+
+function save(){
+  localStorage.setItem("ad_selected", JSON.stringify(selected));
+  localStorage.setItem("ad_notes", JSON.stringify(notes));
+  localStorage.setItem("ad_day", activeDay);
+}
+
+function selectedEvents(){
+  return events
+    .filter(e => isSelected(e.id))
+    .sort((a,b) => dayOrder(a.day) - dayOrder(b.day) || minutes(a) - minutes(b));
+}
+
+function clashIds(){
+  const ids = new Set();
+  const byDay = {};
+
+  selectedEvents().forEach(e => {
+    const key = e.day;
+    byDay[key] ||= [];
+    byDay[key].push(e);
   });
 
-  function showPage(key){
-    Object.values(pages).forEach(p => p.classList.remove("active"));
-    pages[key].classList.add("active");
-    allTabs.forEach(t => t.classList.toggle("active", t.dataset.page === key));
-    window.scrollTo({top:0, behavior:"instant"});
+  Object.values(byDay).forEach(list => {
+    for(let i = 0; i < list.length; i++){
+      for(let j = i + 1; j < list.length; j++){
+        if(Math.abs(minutes(list[i]) - minutes(list[j])) < 30){
+          ids.add(list[i].id);
+          ids.add(list[j].id);
+        }
+      }
+    }
+  });
+
+  return ids;
+}
+
+function renderTabs(){
+  const days = ["Torsdag","Fredag","Lördag"];
+
+  document.getElementById("dayTabs").innerHTML = days.map(d =>
+    `<button class="pill ${d === activeDay ? "active" : ""}" data-day="${d}">${d}</button>`
+  ).join("");
+
+  document.querySelectorAll("[data-day]").forEach(btn => {
+    btn.onclick = () => {
+      activeDay = btn.dataset.day;
+      save();
+      render();
+      document.getElementById("section-" + activeDay).scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    };
+  });
+}
+
+function eventMatches(e){
+  const q = search.value.trim().toLowerCase();
+  const text = `${e.day} ${e.start} ${e.title} ${e.place} ${typeText(e.type)} ${blockText(e.block)}`.toLowerCase();
+  const filterOk = activeFilter === "all" || e.type === activeFilter || e.block === activeFilter;
+
+  return filterOk && (!q || text.includes(q));
+}
+
+function renderProgram(){
+  const clash = clashIds();
+  const days = ["Torsdag","Fredag","Lördag"];
+
+  program.innerHTML = days.map(day => {
+    const list = events
+      .filter(e => e.day === day && eventMatches(e))
+      .sort((a,b) => minutes(a) - minutes(b));
+
+    return `
+      <section id="section-${day}">
+        <div class="sectionTitle">
+          <h2>${day.toUpperCase()}</h2>
+          <span class="count">${list.length} träffar</span>
+        </div>
+        ${list.length ? list.map(e => eventHtml(e, clash)).join("") : `<div class="empty">Inga träffar med aktuellt filter.</div>`}
+      </section>
+    `;
+  }).join("");
+
+  bindEventButtons();
+}
+
+function eventHtml(e, clash){
+  const on = isSelected(e.id);
+  const clashHtml = clash.has(e.id) ? `<span class="clash">Tidskrock</span>` : "";
+
+  return `
+    <article class="event ${e.block === "night" ? "night" : ""} ${on ? "selected" : ""}" data-id="${e.id}">
+      <div class="time">${e.start}</div>
+      <div>
+        <p class="eventTitle">${e.title}</p>
+        <div class="meta">
+          <span class="tag">${e.place}</span>
+          <span class="tag">${typeText(e.type)}</span>
+          <span class="tag">${blockText(e.block)}</span>
+          ${clashHtml}
+        </div>
+      </div>
+      <button class="star ${on ? "on" : ""}" data-star="${e.id}" aria-label="Välj">★</button>
+      <div class="note">
+        <textarea data-note="${e.id}" placeholder="Egen notering, till exempel mötesplats eller måste ses">${notes[e.id] || ""}</textarea>
+      </div>
+    </article>
+  `;
+}
+
+function bindEventButtons(){
+  document.querySelectorAll("[data-star]").forEach(btn => {
+    btn.onclick = () => toggle(Number(btn.dataset.star));
+  });
+
+  document.querySelectorAll("[data-note]").forEach(t => {
+    t.oninput = () => {
+      notes[t.dataset.note] = t.value;
+      save();
+      renderGuide();
+    };
+  });
+}
+
+function toggle(id){
+  if(isSelected(id)){
+    selected = selected.filter(x => x !== id);
+  } else {
+    selected.push(id);
   }
 
-  tabs.addEventListener("click", (e) => {
-    const btn = e.target.closest(".tab");
-    if(!btn) return;
-    showPage(btn.dataset.page);
-  });
+  save();
+  render();
+}
 
-  // Accordions
-  document.querySelectorAll("[data-qa]").forEach(box=>{
-    const btn = box.querySelector("button");
-    btn.addEventListener("click", ()=> box.classList.toggle("open"));
-  });
+function renderGuide(){
+  const list = selectedEvents();
+  const clash = clashIds();
 
-  // Begrepp flipcards (bildstöd + nyckelord ur texten)
-  const begrepp = {
-    "asatro":"Vikingarnas religion med många gudar.",
-    "kristendom":"Religion med en Gud. Spreds långsamt i Norden.",
-    "islam":"Religion som vikingar mötte i öst.",
-    "runsten":"Minnessten. Text kan berätta om resor och familjer.",
-    "historiebruk":"Hur vi använder historia idag (turism/film/identitet).",
-    "offer":"Att ge något till gudarna för att få hjälp.",
-    "Oden":"Krigets och visdomens gud.",
-    "Tor":"Skyddade människor. Hammaren heter Mjölner.",
-    "Freja":"Kärlek och fruktbarhet (tillsammans med Frej).",
-    "Frej":"Skördar och fruktbarhet (tillsammans med Freja).",
-    "Asgård":"Platsen där gudarna bodde.",
-    "Midgård":"Platsen där människorna bodde.",
-    "skriftliga källor":"Texter som skrevs ner om vikingar.",
-    "kvarlevor":"Saker som finns kvar (skepp, smycken, vapen…).",
-    "turism":"Historia används för att locka besökare.",
-    "Ansgar":"Munk som kom till Birka på 800-talet.",
-    "Birka":"Plats där kristendomen spreds tidigt i Sverige.",
-    "silvermynt":"Arabiska mynt i Norden visar kontakt i öst."
-  };
+  document.getElementById("selectedCount").textContent = list.length;
+  document.getElementById("clashCount").textContent = clash.size;
+  document.getElementById("guideSummary").textContent = list.length ? `${list.length} valda` : "Tom guide";
 
-  const begContainer = document.getElementById("begreppCards");
-  Object.entries(begrepp).forEach(([word, def]) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="card-inner">
-        <div class="card-face front">${word}</div>
-        <div class="card-face back">${def}</div>
-      </div>`;
-    card.addEventListener("click", () => card.classList.toggle("flipped"));
-    begContainer.appendChild(card);
-  });
+  guideList.innerHTML = list.length ? list.map(e => `
+    <div class="guideItem">
+      <b>${e.day} ${e.start} ${e.title}</b>
+      <div class="small">${e.place} · ${blockText(e.block)} ${clash.has(e.id) ? "· Tidskrock" : ""}</div>
+      ${notes[e.id] ? `<div class="small">Notering: ${escapeHtml(notes[e.id])}</div>` : ""}
+    </div>
+  `).join("") : `<div class="empty">Du har inte valt något ännu.</div>`;
+}
 
-  // Sant/Falskt
-  const tf = [
-    {
-      s:"Vikingatiden var väldigt populär på 1800-talet.",
-      correct:true,
-      why:"Sant: vikingar blev populära i berättelser och kultur på 1800-talet."
-    },
-    {
-      s:"De flesta runstenarna är från 1400-talet.",
-      correct:false,
-      why:"Falskt: runstenar hör främst till vikingatid/tidig medeltid, inte 1400-talet."
-    },
-    {
-      s:"Mjölner var en av de viktigaste gudarna.",
-      correct:false,
-      why:"Falskt: Mjölner är Tors hammare, inte en gud."
-    },
-    {
-      s:"I slutet av vikingatiden byggdes kyrkor och moskéer i Norden.",
-      correct:false,
-      why:"Falskt: kyrkor började byggas, men moskéer byggdes inte som del av kristnandet i Norden."
-    },
-    {
-      s:"Tors hammare är en symbol för asatron, precis som korset är för kristendomen.",
-      correct:true,
-      why:"Sant: Mjölner kan symbolisera asatro, korset kristendom."
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[m]));
+}
+
+function makeGuideText(){
+  const list = selectedEvents();
+
+  if(!list.length) return "Min American Days guide är tom.";
+
+  let out = "MIN AMERICAN DAYS GUIDE\n\n";
+  let lastDay = "";
+
+  list.forEach(e => {
+    if(e.day !== lastDay){
+      lastDay = e.day;
+      out += `${e.day.toUpperCase()}\n`;
     }
-  ];
 
-  const tfList = document.getElementById("tfList");
+    out += `${e.start}  ${e.title}  |  ${e.place}`;
 
-  tf.forEach((item, idx)=>{
-    const div = document.createElement("div");
-    div.className = "tf-item";
-    div.innerHTML = `
-      <div class="s">${item.s}</div>
-      <div class="tf-btns">
-        <button class="tf-btn primary" type="button" data-a="true">Sant</button>
-        <button class="tf-btn" type="button" data-a="false">Falskt</button>
-      </div>
-      <div class="tf-result" id="tf-r-${idx}"></div>
-      <div class="small-note" id="tf-w-${idx}"></div>
-    `;
-    const res = div.querySelector(`#tf-r-${idx}`);
-    const why = div.querySelector(`#tf-w-${idx}`);
+    if(notes[e.id]){
+      out += `  |  Notering: ${notes[e.id]}`;
+    }
 
-    div.querySelectorAll(".tf-btn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const a = (btn.dataset.a === "true");
-        const ok = (a === item.correct);
-        res.innerHTML = ok ? `<span class="good">Rätt 👍</span>` : `<span class="bad">Inte riktigt</span>`;
-        why.textContent = item.why;
-      });
+    out += "\n";
+  });
+
+  const clash = clashIds();
+
+  if(clash.size){
+    out += "\nOBS: Det finns tidskrockar. Prioritera manuellt.\n";
+  }
+
+  return out;
+}
+
+function render(){
+  renderTabs();
+  renderProgram();
+  renderGuide();
+
+  document.querySelectorAll(".navbtn[data-jump]").forEach(b => {
+    b.classList.toggle("active", b.dataset.jump === activeDay);
+  });
+}
+
+document.querySelectorAll("[data-filter]").forEach(btn => {
+  btn.onclick = () => {
+    activeFilter = btn.dataset.filter;
+
+    document.querySelectorAll("[data-filter]").forEach(b => {
+      b.classList.toggle("active", b === btn);
     });
 
-    tfList.appendChild(div);
-  });
-</script>
+    renderProgram();
+  };
+});
 
+search.oninput = renderProgram;
+
+document.getElementById("showGuideBtn").onclick = () => {
+  guide.classList.toggle("show");
+
+  if(guide.classList.contains("show")){
+    guide.scrollIntoView({behavior:"smooth"});
+  }
+};
+
+document.getElementById("guideNav").onclick = () => {
+  guide.classList.add("show");
+  guide.scrollIntoView({behavior:"smooth"});
+};
+
+document.querySelectorAll(".navbtn[data-jump]").forEach(btn => {
+  btn.onclick = () => {
+    activeDay = btn.dataset.jump;
+    save();
+    render();
+
+    document.getElementById("section-" + activeDay).scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  };
+});
+
+document.getElementById("copyBtn").onclick = async () => {
+  const text = makeGuideText();
+  const box = document.getElementById("copyBox");
+
+  box.style.display = "block";
+  box.value = text;
+  box.select();
+
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){}
+};
+
+document.getElementById("clearBtn").onclick = () => {
+  if(confirm("Rensa alla val?")){
+    selected = [];
+    notes = {};
+    save();
+    render();
+  }
+};
+
+render();
+</script>
 </body>
 </html>
