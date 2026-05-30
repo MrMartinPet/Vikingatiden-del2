@@ -1,841 +1,1639 @@
 <!doctype html>
+
 <html lang="sv">
+
 <head>
+
   <meta charset="utf-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <meta name="theme-color" content="#050505">
-  <title>American Days Guide</title>
+
+  <title>Pelles Rockabilly Radar</title>
+
   <style>
+
     :root{
+
       --bg:#050505;
+
       --panel:#121212;
-      --panel2:#1b1b1b;
+
       --line:#2b2b2b;
+
       --text:#f3f3f3;
+
       --muted:#b8b8b8;
+
       --orange:#ff9900;
+
       --blue:#39a8ff;
-      --green:#35d07f;
-      --red:#ff5c5c;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
+
+      --spotify:#1db954;
+
+      --yellow:#ffd15c;
+
       --radius:18px;
+
     }
 
     *{box-sizing:border-box}
+
     html{scroll-behavior:smooth}
 
     body{
+
       margin:0;
+
       background:radial-gradient(circle at top,#242424 0,#080808 35%,#050505 100%);
+
       color:var(--text);
+
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+
       line-height:1.35;
+
       padding-bottom:86px;
+
     }
 
     header{
+
       position:sticky;
+
       top:0;
+
       z-index:20;
-      background:rgba(5,5,5,.92);
+
+      background:rgba(5,5,5,.94);
+
       backdrop-filter:blur(14px);
+
       border-bottom:1px solid var(--line);
+
       padding:14px 14px 10px;
+
     }
 
     .top{
+
       display:flex;
+
       align-items:center;
+
       justify-content:space-between;
+
       gap:10px;
+
       max-width:980px;
+
       margin:0 auto;
+
     }
 
     .brand{
+
       display:flex;
+
       align-items:center;
+
       gap:10px;
+
       min-width:0;
+
     }
 
     .logo{
-      width:48px;
-      height:34px;
-      border-radius:8px;
+
+      width:50px;
+
+      height:36px;
+
+      border-radius:10px;
+
       background:linear-gradient(135deg,#143a85,#fff 42%,#d82424 43%,#d82424 62%,#fff 63%);
+
       display:grid;
+
       place-items:center;
-      font-size:10px;
-      font-weight:900;
+
+      font-size:11px;
+
+      font-weight:950;
+
       color:#ffcf40;
+
       text-shadow:0 1px 1px #000;
+
       transform:skew(-8deg);
+
       flex:0 0 auto;
+
     }
 
     h1{
+
       margin:0;
+
       font-size:18px;
+
       letter-spacing:.2px;
+
       white-space:nowrap;
+
       overflow:hidden;
+
       text-overflow:ellipsis;
+
     }
 
     .small{
+
       font-size:12px;
+
       color:var(--muted);
+
       margin-top:2px;
+
     }
 
     .pill{
+
       border:1px solid var(--line);
+
       background:#151515;
+
       color:var(--text);
+
       border-radius:999px;
+
       padding:8px 11px;
-      font-weight:700;
+
+      font-weight:800;
+
       cursor:pointer;
+
       white-space:nowrap;
+
     }
 
     .pill.active{
+
       background:var(--orange);
+
       color:#111;
+
       border-color:var(--orange);
+
     }
 
     .tabs{
+
       display:flex;
+
       gap:8px;
+
       overflow:auto;
+
       padding:12px 0 2px;
+
       max-width:980px;
+
       margin:0 auto;
+
       scrollbar-width:none;
+
     }
 
     .tabs::-webkit-scrollbar{display:none}
 
     main{
+
       max-width:980px;
+
       margin:0 auto;
+
       padding:14px;
+
     }
 
     .hero{
+
       background:linear-gradient(135deg,rgba(255,153,0,.2),rgba(57,168,255,.12)),var(--panel);
+
       border:1px solid var(--line);
+
       border-radius:var(--radius);
+
       padding:14px;
-      box-shadow:var(--shadow);
+
       margin-bottom:12px;
+
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+
     }
 
     .hero h2{
+
       margin:0 0 6px;
+
       font-size:20px;
+
     }
 
     .tools{
+
       display:grid;
+
       grid-template-columns:1fr 1fr;
+
       gap:10px;
+
       margin:12px 0;
+
     }
 
     .tool{
+
       background:var(--panel);
+
       border:1px solid var(--line);
+
       border-radius:var(--radius);
+
       padding:12px;
-      min-height:78px;
+
+      min-height:76px;
+
     }
 
     .tool b{
+
       display:block;
-      font-size:20px;
-      margin-bottom:4px;
+
+      font-size:22px;
+
+      margin-bottom:3px;
+
     }
 
     .search{
+
       width:100%;
+
       padding:13px 14px;
+
       border:1px solid var(--line);
+
       border-radius:14px;
+
       background:#101010;
+
       color:var(--text);
+
       font-size:16px;
+
       outline:none;
+
       margin:4px 0 12px;
+
     }
 
     .filterbar{
+
       display:flex;
+
       gap:8px;
+
       overflow:auto;
+
       margin:0 0 12px;
+
       scrollbar-width:none;
+
     }
 
     .filterbar::-webkit-scrollbar{display:none}
 
     .sectionTitle{
+
       display:flex;
+
       align-items:center;
+
       justify-content:space-between;
+
       gap:10px;
+
       margin:20px 0 10px;
+
     }
 
     .sectionTitle h2{
+
       margin:0;
+
       font-size:24px;
+
       background:var(--orange);
-      color:white;
+
+      color:#fff;
+
       padding:8px 12px;
+
       border-radius:8px;
+
       letter-spacing:.5px;
+
     }
 
     .count{
+
       color:var(--muted);
+
       font-size:13px;
+
     }
 
     .event{
+
       background:linear-gradient(180deg,#171717,#101010);
+
       border:1px solid var(--line);
+
       border-radius:var(--radius);
+
       padding:13px;
+
       margin:10px 0;
+
       display:grid;
+
       grid-template-columns:auto 1fr auto;
+
       gap:12px;
+
       align-items:start;
+
       box-shadow:0 6px 18px rgba(0,0,0,.18);
+
     }
 
     .time{
+
       font-size:18px;
-      font-weight:900;
+
+      font-weight:950;
+
       color:var(--orange);
+
       min-width:54px;
+
     }
 
     .event.night .time{
+
       color:var(--blue);
+
     }
 
     .eventTitle{
+
       font-size:16px;
-      font-weight:850;
+
+      font-weight:900;
+
       margin:0 0 4px;
+
     }
 
     .meta{
+
       color:var(--muted);
+
       font-size:13px;
+
       display:flex;
+
       flex-wrap:wrap;
+
       gap:7px;
+
+      margin-bottom:8px;
+
     }
 
     .tag{
+
       border:1px solid #333;
+
       border-radius:999px;
+
       padding:2px 7px;
+
       background:#202020;
+
+    }
+
+    .eventActions{
+
+      display:flex;
+
+      flex-wrap:wrap;
+
+      gap:7px;
+
+      margin-top:8px;
+
+    }
+
+    .miniBtn{
+
+      display:inline-flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      gap:5px;
+
+      border:1px solid #343434;
+
+      border-radius:999px;
+
+      padding:7px 10px;
+
+      font-size:13px;
+
+      font-weight:900;
+
+      text-decoration:none;
+
+      color:var(--text);
+
+      background:#1b1b1b;
+
+      cursor:pointer;
+
+    }
+
+    .miniBtn.spotify{
+
+      background:var(--spotify);
+
+      color:#061b0d;
+
+      border-color:var(--spotify);
+
+    }
+
+    .miniBtn.info{
+
+      background:#222;
+
+      color:#fff;
+
     }
 
     .star{
+
       width:42px;
+
       height:42px;
+
       border-radius:50%;
+
       border:1px solid #444;
+
       background:#111;
+
       color:#777;
+
       font-size:24px;
+
       cursor:pointer;
+
     }
 
     .star.on{
+
       background:var(--orange);
+
       color:#111;
+
       border-color:var(--orange);
+
     }
 
     .note{
+
       grid-column:2 / 4;
+
       display:none;
+
       margin-top:-4px;
+
     }
 
     .event.selected .note{
+
       display:block;
+
     }
 
     textarea{
+
       width:100%;
+
       min-height:58px;
+
       resize:vertical;
+
       border-radius:12px;
+
       border:1px solid var(--line);
+
       background:#0b0b0b;
+
       color:var(--text);
+
       padding:10px;
+
       font-family:inherit;
+
+    }
+
+    .infoBox{
+
+      grid-column:2 / 4;
+
+      display:none;
+
+      border-left:4px solid var(--orange);
+
+      background:#181818;
+
+      border-radius:12px;
+
+      padding:10px;
+
+      color:#e8e8e8;
+
+      font-size:14px;
+
+      margin-top:-2px;
+
+    }
+
+    .infoBox.show{
+
+      display:block;
+
     }
 
     .clash{
+
       display:inline-flex;
+
       gap:5px;
+
       align-items:center;
+
       color:#111;
-      background:#ffd15c;
+
+      background:var(--yellow);
+
       border-radius:999px;
+
       padding:2px 8px;
+
       font-size:12px;
-      font-weight:800;
-    }
 
-    .bottomnav{
-      position:fixed;
-      left:0;
-      right:0;
-      bottom:0;
-      z-index:30;
-      background:rgba(5,5,5,.96);
-      backdrop-filter:blur(14px);
-      border-top:1px solid var(--line);
-      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-    }
+      font-weight:900;
 
-    .bottomnav .wrap{
-      max-width:980px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-
-    .navbtn{
-      border:0;
-      background:#151515;
-      color:var(--text);
-      border-radius:14px;
-      padding:9px 5px;
-      font-size:12px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .navbtn.active{
-      background:var(--orange);
-      color:#111;
     }
 
     .guide{
+
       display:none;
+
       background:var(--panel);
+
       border:1px solid var(--line);
+
       border-radius:var(--radius);
+
       padding:14px;
+
       margin:12px 0;
+
     }
 
     .guide.show{
+
       display:block;
+
     }
 
     .guideItem{
+
       border-bottom:1px solid var(--line);
+
       padding:10px 0;
+
     }
 
     .guideItem:last-child{
+
       border-bottom:0;
+
     }
 
     .actions{
+
       display:grid;
+
       grid-template-columns:1fr 1fr;
+
       gap:10px;
+
       margin-top:12px;
+
     }
 
     .action{
+
       border:0;
+
       border-radius:14px;
+
       background:var(--orange);
+
       color:#111;
+
       padding:12px;
-      font-weight:900;
+
+      font-weight:950;
+
       cursor:pointer;
+
     }
 
     .action.secondary{
+
       background:#222;
+
       color:var(--text);
+
       border:1px solid var(--line);
+
     }
 
     .copybox{
+
       width:100%;
+
       min-height:160px;
+
       margin-top:10px;
+
       display:none;
+
     }
 
     .empty{
+
       color:var(--muted);
+
       text-align:center;
+
       padding:24px 10px;
+
       border:1px dashed #3a3a3a;
+
       border-radius:var(--radius);
+
+    }
+
+    .bottomnav{
+
+      position:fixed;
+
+      left:0;
+
+      right:0;
+
+      bottom:0;
+
+      z-index:30;
+
+      background:rgba(5,5,5,.96);
+
+      backdrop-filter:blur(14px);
+
+      border-top:1px solid var(--line);
+
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+
+    }
+
+    .bottomnav .wrap{
+
+      max-width:980px;
+
+      margin:0 auto;
+
+      display:grid;
+
+      grid-template-columns:repeat(4,1fr);
+
+      gap:8px;
+
+    }
+
+    .navbtn{
+
+      border:0;
+
+      background:#151515;
+
+      color:var(--text);
+
+      border-radius:14px;
+
+      padding:9px 5px;
+
+      font-size:12px;
+
+      font-weight:900;
+
+      cursor:pointer;
+
+    }
+
+    .navbtn.active{
+
+      background:var(--orange);
+
+      color:#111;
+
     }
 
     @media (max-width:520px){
+
       main{padding:12px}
+
       .tools{grid-template-columns:1fr 1fr}
+
       .tool{min-height:70px;padding:11px}
-      .tool b{font-size:18px}
+
+      .tool b{font-size:20px}
+
       .event{grid-template-columns:auto 1fr auto;padding:12px;gap:10px}
+
       .sectionTitle h2{font-size:22px}
+
       h1{font-size:16px}
+
     }
+
   </style>
+
 </head>
 
 <body>
+
 <header>
+
   <div class="top">
+
     <div class="brand">
+
       <div class="logo">AD</div>
+
       <div>
-        <h1>American Days Guide</h1>
-        <div class="small">Öland 4 till 6 juni</div>
+
+        <h1>Pelles Rockabilly Radar</h1>
+
+        <div class="small">American Days Öland 4 till 6 juni</div>
+
       </div>
+
     </div>
+
     <button class="pill" id="showGuideBtn">Min guide</button>
+
   </div>
+
   <div class="tabs" id="dayTabs"></div>
+
 </header>
 
 <main>
+
   <section class="hero">
-    <h2>Planera vad du vill se</h2>
-    <div class="small">Tryck på stjärnan för att lägga till i din egen guide. Appen sparar valen i mobilen.</div>
+
+    <h2>Välj banden, bygg din kväll</h2>
+
+    <div class="small">Stjärna det du vill se. Tryck provlyssna för Spotify. Tryck info för snabb koll på artisten.</div>
+
   </section>
 
   <section class="tools">
+
     <div class="tool">
+
       <b id="selectedCount">0</b>
+
       <span class="small">valda stopp</span>
+
     </div>
+
     <div class="tool">
+
       <b id="clashCount">0</b>
+
       <span class="small">tidskrockar</span>
+
     </div>
+
   </section>
 
   <input class="search" id="search" placeholder="Sök artist, plats eller dag">
 
   <div class="filterbar">
+
     <button class="pill active" data-filter="all">Alla</button>
+
     <button class="pill" data-filter="music">Musik</button>
+
     <button class="pill" data-filter="cars">Bilar</button>
+
     <button class="pill" data-filter="show">Show</button>
+
     <button class="pill" data-filter="night">American Nights</button>
+
     <button class="pill" data-filter="day">American Days</button>
+
   </div>
 
   <section class="guide" id="guide">
+
     <div class="sectionTitle">
+
       <h2>MIN GUIDE</h2>
+
       <span class="count" id="guideSummary"></span>
+
     </div>
+
     <div id="guideList"></div>
+
     <div class="actions">
+
       <button class="action" id="copyBtn">Skapa textguide</button>
+
       <button class="action secondary" id="clearBtn">Rensa val</button>
+
     </div>
+
     <textarea class="copybox" id="copyBox" readonly></textarea>
+
   </section>
 
   <div id="program"></div>
+
 </main>
 
 <nav class="bottomnav">
+
   <div class="wrap">
+
     <button class="navbtn active" data-jump="Torsdag">Torsdag</button>
+
     <button class="navbtn" data-jump="Fredag">Fredag</button>
+
     <button class="navbtn" data-jump="Lördag">Lördag</button>
+
     <button class="navbtn" id="guideNav">Guide</button>
+
   </div>
+
 </nav>
 
 <script>
+
+const artistInfo = {
+
+  "Highway 25": "Rock och countrydoftande festivalband. Bra dagsstart om du vill komma igång utan att gå för hårt direkt.",
+
+  "The Satellites": "Svensk instrumental surfrock med tydlig Ventureskänsla, twangiga gitarrer och tidig 60 talsenergi.",
+
+  "Herr Ludwigs orkester": "Svenskt partyband som gör rockabillyversioner av oväntade låtar. Mycket fart och humor.",
+
+  "Dra en Banjo": "Svensk banjo och partykänsla. Troligen bäst när man vill ha enkel energi och allsångsvibb.",
+
+  "Mischief!": "Nederländsk trio med rockabilly, egna låtar, humor och hög liveenergi.",
+
+  "The Jetaways": "Svensk rockabilly från Närke med tajt spel och klassisk rock’n’rollkänsla.",
+
+  "Fancy Dan and the Highshouters": "Rock’n’roll och rootskänsla. Bra val sent på kvällen om du vill hålla dansnivån uppe.",
+
+  "Emelie Thorstensson": "Svensk country och americana med erfaren röst, värme och scenvana.",
+
+  "Lil Camille & Raina Thompson": "Hillbilly, country och americana med svensk och amerikansk front. Råare rootskänsla.",
+
+  "Emma Svensson": "Svensk countryartist med Nashvilleinfluenser, värme och berättande låtar.",
+
+  "Erica Jonsson": "Värmländsk countryartist med jordnära uttryck och svensk berättartradition.",
+
+  "Johnny Horsepower": "Danskt Johnny Cash tribute med outlaw, honky tonk och klassiskt Sun Records sound.",
+
+  "Jake Lindholm": "Svensk country och americana med modern nordisk känsla och Nashvilleinspiration.",
+
+  "The Wild Goners": "Fransk rockabillygrupp som hållit 50 talskänslan levande sedan 1990 talet.",
+
+  "Flatfoot": "Svenskt band med rhythm and blues och rockabilly. Svängigt, rått och liveorienterat.",
+
+  "Peter Jezewski & The Boppin Cats": "Känd svensk rock’n’rollröst från The Boppers. Show, nostalgi och stark allsångsfaktor.",
+
+  "John Whiteleather and the King Rats": "Amerikansk rock’n’roll och rockabilly med vintagekänsla och roadmusicattityd.",
+
+  "Okawango Outlaws": "Svensk rock’n’roll från Värmland. Rätt val om du vill ha rak och enkel rockenergi.",
+
+  "The Promise Band Springsteen Tribute": "Springsteen tribute. För dig som vill ha arenarock, historier och refränger.",
+
+  "Creedence Tribute": "Tribute till Creedence Clearwater Revival. Säkert kort för klassisk swamp rock.",
+
+  "Ludwigssons Orkester": "Dans och partyorkester i retroanda. Placeras bäst som lättsam paus mellan tyngre akter.",
+
+  "Charlie Thompson": "Brittisk hillbilly, honky tonk, rockabilly och western swing med mycket 50 talskänsla.",
+
+  "Rednex": "Svensk eurodance och countrypop. Mest kända för Cotton Eye Joe. Maxad partyfaktor.",
+
+  "The Go Getters": "Svensk rockabillytrio från Västerås med rå energi, blues och country i botten.",
+
+  "Record Hop med DJ": "DJ med 50 och 60 talsfokus. Bra mellan banden och för dans.",
+
+  "Record Hop med DJ Tiny Tim & Guest": "DJ set för sena dansgolvet. Bra avslut efter banden."
+
+};
+
 const events = [
+
   {day:"Torsdag", start:"14:00", title:"Highway 25", place:"American Days Tent", type:"music", block:"day"},
+
   {day:"Torsdag", start:"16:00", title:"Highway 25", place:"American Days Tent", type:"music", block:"day"},
+
   {day:"Torsdag", start:"20:30", title:"The Satellites", place:"The Barn", type:"music", block:"night"},
+
   {day:"Torsdag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Torsdag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Torsdag", start:"21:45", title:"Mischief!", place:"The Barn", type:"music", block:"night"},
+
   {day:"Torsdag", start:"22:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Torsdag", start:"23:00", title:"The Jetaways", place:"The Barn", type:"music", block:"night"},
+
   {day:"Torsdag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Torsdag", start:"00:15", title:"Fancy Dan and the Highshouters", place:"The Barn", type:"music", block:"night", nextDay:true},
+
   {day:"Torsdag", start:"01:00", title:"Record Hop med DJ", place:"The Barn", type:"music", block:"night", nextDay:true},
 
   {day:"Fredag", start:"11:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
-  {day:"Fredag", start:"13:00", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day"},
+
+  {day:"Fredag", start:"13:00", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day", artist:"Herr Ludwigs orkester"},
+
   {day:"Fredag", start:"14:00", title:"Miss American Days Presentation", place:"American Days Tent", type:"show", block:"day"},
+
   {day:"Fredag", start:"14:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+
   {day:"Fredag", start:"15:00", title:"Mel´s Challenge", place:"Bilsport Classic stage", type:"show", block:"day"},
-  {day:"Fredag", start:"15:00", title:"Ranchparty med Lil Camille", place:"American Days Tent", type:"music", block:"day"},
+
+  {day:"Fredag", start:"15:00", title:"Ranchparty med Lil Camille", place:"American Days Tent", type:"music", block:"day", artist:"Lil Camille & Raina Thompson"},
+
   {day:"Fredag", start:"15:30", title:"Bedömning av lastbilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+
   {day:"Fredag", start:"16:30", title:"The Satellites", place:"American Days Tent", type:"music", block:"day"},
+
   {day:"Fredag", start:"19:30", title:"Emelie Thorstensson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Fredag", start:"20:30", title:"Lil Camille & Raina Thompson", place:"The Barn", type:"music", block:"night"},
+
   {day:"Fredag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Fredag", start:"21:00", title:"Emma Svensson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Fredag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Fredag", start:"21:45", title:"Mischief!", place:"The Barn", type:"music", block:"night"},
+
   {day:"Fredag", start:"22:30", title:"Erica Jonsson", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Fredag", start:"22:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Fredag", start:"23:00", title:"Johnny Horsepower", place:"The Barn", type:"music", block:"night"},
+
   {day:"Fredag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Fredag", start:"00:00", title:"Jake Lindholm", place:"Bilsport & MC tältet", type:"music", block:"night", nextDay:true},
+
   {day:"Fredag", start:"00:15", title:"The Wild Goners", place:"The Barn", type:"music", block:"night", nextDay:true},
+
   {day:"Fredag", start:"01:00", title:"Record Hop med DJ", place:"The Barn", type:"music", block:"night", nextDay:true},
 
   {day:"Lördag", start:"11:00", title:"Bedömning av bilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+
   {day:"Lördag", start:"12:30", title:"Flatfoot", place:"American Days Tent", type:"music", block:"day"},
+
   {day:"Lördag", start:"13:30", title:"Bedömning bilar och lastbilar", place:"Bilsport Classic stage", type:"cars", block:"day"},
+
   {day:"Lördag", start:"14:00", title:"Pin Up Miss American Days", place:"American Days Tent", type:"show", block:"day"},
+
   {day:"Lördag", start:"15:00", title:"Peter Jezewski & The Boppin Cats", place:"American Days Tent", type:"music", block:"day"},
+
   {day:"Lördag", start:"15:30", title:"Prisutdelning", place:"Bilsport Classic stage", type:"show", block:"day"},
-  {day:"Lördag", start:"16:30", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day"},
+
+  {day:"Lördag", start:"16:30", title:"Herr Ludwigs Orkester", place:"American Days Tent", type:"music", block:"day", artist:"Herr Ludwigs orkester"},
+
   {day:"Lördag", start:"19:30", title:"John Whiteleather and the King Rats", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Lördag", start:"20:30", title:"Okawango Outlaws", place:"The Barn", type:"music", block:"night"},
+
   {day:"Lördag", start:"20:30", title:"Herr Ludwigs orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Lördag", start:"21:00", title:"The Promise Band Springsteen Tribute", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Lördag", start:"21:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Lördag", start:"21:45", title:"Peter Jezewski & The Boppin Cats", place:"The Barn", type:"music", block:"night"},
+
   {day:"Lördag", start:"22:30", title:"Creedence Tribute", place:"Bilsport & MC tältet", type:"music", block:"night"},
+
   {day:"Lördag", start:"22:30", title:"Ludwigssons Orkester", place:"The Saloon", type:"music", block:"night"},
+
   {day:"Lördag", start:"23:00", title:"Charlie Thompson", place:"The Barn", type:"music", block:"night"},
+
   {day:"Lördag", start:"23:30", title:"Dra en Banjo", place:"Jack Daniel’s Tent", type:"music", block:"night"},
+
   {day:"Lördag", start:"00:00", title:"Rednex", place:"Bilsport & MC tältet", type:"music", block:"night", nextDay:true},
+
   {day:"Lördag", start:"00:15", title:"The Go Getters", place:"The Barn", type:"music", block:"night", nextDay:true},
+
   {day:"Lördag", start:"01:00", title:"Record Hop med DJ Tiny Tim & Guest", place:"The Barn", type:"music", block:"night", nextDay:true},
+
   {day:"Lördag", start:"01:15", title:"Fyrverkeri", place:"Festivalområdet", type:"show", block:"night", nextDay:true}
-].map((e,i)=>({...e,id:i}));
+
+].map((e,i) => ({...e,id:i}));
 
 let selected = JSON.parse(localStorage.getItem("ad_selected") || "[]");
+
 let notes = JSON.parse(localStorage.getItem("ad_notes") || "{}");
+
 let activeFilter = "all";
+
 let activeDay = localStorage.getItem("ad_day") || "Torsdag";
 
 const program = document.getElementById("program");
+
 const guide = document.getElementById("guide");
+
 const guideList = document.getElementById("guideList");
+
 const search = document.getElementById("search");
 
 function dayOrder(day){
+
   return {Torsdag:1,Fredag:2,Lördag:3}[day] || 9;
+
+}
+
+function artistName(e){
+
+  return e.artist || e.title;
+
+}
+
+function spotifyUrl(e){
+
+  return "https://open.spotify.com/search/" + encodeURIComponent(artistName(e));
+
 }
 
 function minutes(e){
+
   const [h,m] = e.start.split(":").map(Number);
+
   let mins = h * 60 + m;
+
   if(e.nextDay) mins += 24 * 60;
+
   return mins;
+
 }
 
 function typeText(type){
+
   return {music:"Musik",cars:"Bilar",show:"Show"}[type] || type;
+
 }
 
 function blockText(block){
+
   return block === "night" ? "American Nights" : "American Days";
+
 }
 
 function isSelected(id){
+
   return selected.includes(id);
+
 }
 
 function save(){
+
   localStorage.setItem("ad_selected", JSON.stringify(selected));
+
   localStorage.setItem("ad_notes", JSON.stringify(notes));
+
   localStorage.setItem("ad_day", activeDay);
+
 }
 
 function selectedEvents(){
+
   return events
+
     .filter(e => isSelected(e.id))
+
     .sort((a,b) => dayOrder(a.day) - dayOrder(b.day) || minutes(a) - minutes(b));
+
 }
 
 function clashIds(){
+
   const ids = new Set();
+
   const byDay = {};
 
   selectedEvents().forEach(e => {
-    const key = e.day;
-    byDay[key] ||= [];
-    byDay[key].push(e);
+
+    byDay[e.day] ||= [];
+
+    byDay[e.day].push(e);
+
   });
 
   Object.values(byDay).forEach(list => {
+
     for(let i = 0; i < list.length; i++){
+
       for(let j = i + 1; j < list.length; j++){
+
         if(Math.abs(minutes(list[i]) - minutes(list[j])) < 30){
+
           ids.add(list[i].id);
+
           ids.add(list[j].id);
+
         }
+
       }
+
     }
+
   });
 
   return ids;
+
 }
 
 function renderTabs(){
+
   const days = ["Torsdag","Fredag","Lördag"];
 
   document.getElementById("dayTabs").innerHTML = days.map(d =>
+
     `<button class="pill ${d === activeDay ? "active" : ""}" data-day="${d}">${d}</button>`
+
   ).join("");
 
   document.querySelectorAll("[data-day]").forEach(btn => {
+
     btn.onclick = () => {
+
       activeDay = btn.dataset.day;
+
       save();
+
       render();
+
       document.getElementById("section-" + activeDay).scrollIntoView({
+
         behavior:"smooth",
+
         block:"start"
+
       });
+
     };
+
   });
+
 }
 
 function eventMatches(e){
+
   const q = search.value.trim().toLowerCase();
-  const text = `${e.day} ${e.start} ${e.title} ${e.place} ${typeText(e.type)} ${blockText(e.block)}`.toLowerCase();
+
+  const info = artistInfo[artistName(e)] || "";
+
+  const text = `${e.day} ${e.start} ${e.title} ${e.place} ${typeText(e.type)} ${blockText(e.block)} ${info}`.toLowerCase();
+
   const filterOk = activeFilter === "all" || e.type === activeFilter || e.block === activeFilter;
 
   return filterOk && (!q || text.includes(q));
+
 }
 
 function renderProgram(){
+
   const clash = clashIds();
+
   const days = ["Torsdag","Fredag","Lördag"];
 
   program.innerHTML = days.map(day => {
+
     const list = events
+
       .filter(e => e.day === day && eventMatches(e))
+
       .sort((a,b) => minutes(a) - minutes(b));
 
     return `
+
       <section id="section-${day}">
+
         <div class="sectionTitle">
+
           <h2>${day.toUpperCase()}</h2>
+
           <span class="count">${list.length} träffar</span>
+
         </div>
+
         ${list.length ? list.map(e => eventHtml(e, clash)).join("") : `<div class="empty">Inga träffar med aktuellt filter.</div>`}
+
       </section>
+
     `;
+
   }).join("");
 
   bindEventButtons();
+
 }
 
 function eventHtml(e, clash){
+
   const on = isSelected(e.id);
+
   const clashHtml = clash.has(e.id) ? `<span class="clash">Tidskrock</span>` : "";
 
+  const info = artistInfo[artistName(e)] || "Ingen kortinfo inlagd ännu.";
+
+  const musicButtons = e.type === "music" ? `
+
+    <div class="eventActions">
+
+      <a class="miniBtn spotify" href="${spotifyUrl(e)}" target="_blank" rel="noopener">▶ Provlyssna</a>
+
+      <button class="miniBtn info" data-info="${e.id}">ℹ Info</button>
+
+    </div>
+
+  ` : "";
+
   return `
+
     <article class="event ${e.block === "night" ? "night" : ""} ${on ? "selected" : ""}" data-id="${e.id}">
+
       <div class="time">${e.start}</div>
+
       <div>
+
         <p class="eventTitle">${e.title}</p>
+
         <div class="meta">
+
           <span class="tag">${e.place}</span>
+
           <span class="tag">${typeText(e.type)}</span>
+
           <span class="tag">${blockText(e.block)}</span>
+
           ${clashHtml}
+
         </div>
+
+        ${musicButtons}
+
       </div>
+
       <button class="star ${on ? "on" : ""}" data-star="${e.id}" aria-label="Välj">★</button>
-      <div class="note">
-        <textarea data-note="${e.id}" placeholder="Egen notering, till exempel mötesplats eller måste ses">${notes[e.id] || ""}</textarea>
+
+      <div class="infoBox" id="info-${e.id}">
+
+        ${escapeHtml(info)}
+
       </div>
+
+      <div class="note">
+
+        <textarea data-note="${e.id}" placeholder="Egen notering, till exempel mötesplats eller måste ses">${notes[e.id] || ""}</textarea>
+
+      </div>
+
     </article>
+
   `;
+
 }
 
 function bindEventButtons(){
+
   document.querySelectorAll("[data-star]").forEach(btn => {
+
     btn.onclick = () => toggle(Number(btn.dataset.star));
+
+  });
+
+  document.querySelectorAll("[data-info]").forEach(btn => {
+
+    btn.onclick = () => {
+
+      const box = document.getElementById("info-" + btn.dataset.info);
+
+      box.classList.toggle("show");
+
+    };
+
   });
 
   document.querySelectorAll("[data-note]").forEach(t => {
+
     t.oninput = () => {
+
       notes[t.dataset.note] = t.value;
+
       save();
+
       renderGuide();
+
     };
+
   });
+
 }
 
 function toggle(id){
+
   if(isSelected(id)){
+
     selected = selected.filter(x => x !== id);
+
   } else {
+
     selected.push(id);
+
   }
 
   save();
+
   render();
+
 }
 
 function renderGuide(){
+
   const list = selectedEvents();
+
   const clash = clashIds();
 
   document.getElementById("selectedCount").textContent = list.length;
+
   document.getElementById("clashCount").textContent = clash.size;
+
   document.getElementById("guideSummary").textContent = list.length ? `${list.length} valda` : "Tom guide";
 
   guideList.innerHTML = list.length ? list.map(e => `
+
     <div class="guideItem">
+
       <b>${e.day} ${e.start} ${e.title}</b>
+
       <div class="small">${e.place} · ${blockText(e.block)} ${clash.has(e.id) ? "· Tidskrock" : ""}</div>
+
+      ${e.type === "music" ? `<div class="small"><a href="${spotifyUrl(e)}" target="_blank" rel="noopener" style="color:#1db954;font-weight:900;">Provlyssna på Spotify</a></div>` : ""}
+
       ${notes[e.id] ? `<div class="small">Notering: ${escapeHtml(notes[e.id])}</div>` : ""}
+
     </div>
+
   `).join("") : `<div class="empty">Du har inte valt något ännu.</div>`;
+
 }
 
 function escapeHtml(str){
+
   return String(str).replace(/[&<>"']/g, m => ({
+
     "&":"&amp;",
+
     "<":"&lt;",
+
     ">":"&gt;",
+
     '"':"&quot;",
+
     "'":"&#039;"
+
   }[m]));
+
 }
 
 function makeGuideText(){
+
   const list = selectedEvents();
 
   if(!list.length) return "Min American Days guide är tom.";
 
   let out = "MIN AMERICAN DAYS GUIDE\n\n";
+
   let lastDay = "";
 
   list.forEach(e => {
+
     if(e.day !== lastDay){
+
       lastDay = e.day;
+
       out += `${e.day.toUpperCase()}\n`;
+
     }
 
     out += `${e.start}  ${e.title}  |  ${e.place}`;
 
+    if(e.type === "music"){
+
+      out += `  |  Spotify: ${spotifyUrl(e)}`;
+
+    }
+
     if(notes[e.id]){
+
       out += `  |  Notering: ${notes[e.id]}`;
+
     }
 
     out += "\n";
+
   });
 
   const clash = clashIds();
 
   if(clash.size){
+
     out += "\nOBS: Det finns tidskrockar. Prioritera manuellt.\n";
+
   }
 
   return out;
+
 }
 
 function render(){
+
   renderTabs();
+
   renderProgram();
+
   renderGuide();
 
   document.querySelectorAll(".navbtn[data-jump]").forEach(b => {
+
     b.classList.toggle("active", b.dataset.jump === activeDay);
+
   });
+
 }
 
 document.querySelectorAll("[data-filter]").forEach(btn => {
+
   btn.onclick = () => {
+
     activeFilter = btn.dataset.filter;
 
     document.querySelectorAll("[data-filter]").forEach(b => {
+
       b.classList.toggle("active", b === btn);
+
     });
 
     renderProgram();
+
   };
+
 });
 
 search.oninput = renderProgram;
 
 document.getElementById("showGuideBtn").onclick = () => {
+
   guide.classList.toggle("show");
 
   if(guide.classList.contains("show")){
+
     guide.scrollIntoView({behavior:"smooth"});
+
   }
+
 };
 
 document.getElementById("guideNav").onclick = () => {
+
   guide.classList.add("show");
+
   guide.scrollIntoView({behavior:"smooth"});
+
 };
 
 document.querySelectorAll(".navbtn[data-jump]").forEach(btn => {
+
   btn.onclick = () => {
+
     activeDay = btn.dataset.jump;
+
     save();
+
     render();
 
     document.getElementById("section-" + activeDay).scrollIntoView({
+
       behavior:"smooth",
+
       block:"start"
+
     });
+
   };
+
 });
 
 document.getElementById("copyBtn").onclick = async () => {
+
   const text = makeGuideText();
+
   const box = document.getElementById("copyBox");
 
   box.style.display = "block";
+
   box.value = text;
+
   box.select();
 
   try{
+
     await navigator.clipboard.writeText(text);
+
   }catch(e){}
+
 };
 
 document.getElementById("clearBtn").onclick = () => {
+
   if(confirm("Rensa alla val?")){
+
     selected = [];
+
     notes = {};
+
     save();
+
     render();
+
   }
+
 };
 
 render();
+
 </script>
+
 </body>
+
 </html>
